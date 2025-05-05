@@ -29,27 +29,6 @@ func SaveAsset(ctx context.Context, acc *schema.Account) error {
 
 }
 
-func SaveAsset(acc *schema.Account, contract string, tokenId string) {
-	contract = strings.ToLower(contract)
-	found := false
-
-	for i, asset := range acc.Assets {
-		if asset.Type == "ERC721" && asset.ContractAddress == contract {
-			acc.Assets[i].TokenIDs = append(asset.TokenIDs, schema.TokenIDAmount{ID: tokenId})
-			found = true
-			break
-		}
-	}
-
-	if !found {
-		acc.Assets = append(acc.Assets, schema.Asset{
-			ContractAddress: contract,
-			Type:            "ERC721",
-			TokenIDs:        []schema.TokenIDAmount{{ID: tokenId}},
-		})
-	}
-}
-
 func GetAsset(ctx context.Context, address string) (schema.Asset, error) {
 	collection := client.Database(DBName).Collection(AssetCollectionName)
 	var account schema.Asset // 你定义的结构体
